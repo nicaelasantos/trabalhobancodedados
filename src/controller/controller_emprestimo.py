@@ -1,3 +1,5 @@
+import datetime
+import locale
 from model.emprestimo import Emprestimo
 from model.livro import Livro
 from model.usuario import Usuario
@@ -6,6 +8,9 @@ from controller.controller_usuario import Controller_Usuario
 from conexion.oracle_queries import OracleQueries
 
 from reports.relatorios import Relatorio
+
+# Configuração para exibição de datas no formato brasileiro
+locale.setlocale(locale.LC_ALL, "pt-BR")
 
 class Controller_Emprestimo:
 
@@ -130,6 +135,10 @@ class Controller_Emprestimo:
         while not Controller_Emprestimo.valida_data_format(data_devolucao):
             print("\nVocê tentou inserir um formato inválido, tente novamente.\n")
             data_devolucao = input("Data prevista de devolução (DD/MM/YYYY): ")
+        
+        while not Controller_Emprestimo.valida_data_entrega_devolucao(data_emprestimo, data_devolucao):
+            print("\nVocê tentou inserir uma data de devolução menor que a data de entrega, tente novamente.\n")
+            data_devolucao = input("Data prevista de devolução (DD/MM/YYYY): ")
 
         return Emprestimo(0, livro, usuario, data_emprestimo, data_devolucao)
 
@@ -159,14 +168,40 @@ class Controller_Emprestimo:
     @staticmethod
     def valida_data_format(data_string:str=None) -> bool:
         try:
-            data_string = data_string.replace(" ", "")
-            data_array = data_string.split("/")
-            if len(data_array) != 3:
-                return False
-            dia_valido = len(data_array[0]) == 2 and int(data_array[0]) <= 31 and int(data_array[0]) >= 1
-            mes_valido = len(data_array[1]) == 2 and int(data_array[1]) <= 12 and int(data_array[1]) >= 1
-            ano_valido = len(data_array[2]) == 4 and int(data_array[2]) >= 1
-            valido = dia_valido and mes_valido and ano_valido
-            return valido
+            partes_data = data_string.split("/")
+            dia = int(partes_data[0])
+            mes = int(partes_data[1])
+            ano = int(partes_data[2])
+
+            datetime.datetime(ano, mes, dia)
+            return True
+        
         except:
+            print("Erro ao validar data.")
+            return False
+        
+    @staticmethod
+    def valida_data_entrega_devolucao(data_entrega: str, data_devolucao: str) -> bool:
+        try:
+            def converter_data(data: str) -> datetime:
+                partes_data = data.split("/")
+                dia = int(partes_data[0])
+                mes = int(partes_data[1])
+                ano = int(partes_data[2])
+                return datetime.datetime(ano, mes, dia)
+
+            data_entrega = converter_data(data_entrega)
+            data_devolucao = converter_data(data_devolucao)
+
+            if data_devolucao < data_entrega:
+                # Formata a data para exibição
+                data_entrega_formatada = data_entrega.strftime('%x')
+                data_devolucao_formatada = data_devolucao.strftime('%x')
+                # Exibe mensagem de erro
+                raise Exception(f"Data de Devolução ({data_devolucao_formatada}) menor que a Data de Entrega ({data_entrega_formatada})")
+
+            return True
+
+        except Exception as error:
+            print(f"\nErro ao validar data: {error}")
             return False
