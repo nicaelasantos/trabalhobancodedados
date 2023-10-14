@@ -72,64 +72,79 @@ def run():
     config.clear_console()
 
     while True:
-        print(config.MENU_PRINCIPAL)
-        opcao = int(input("Escolha uma opção [1-5]: "))
-        config.clear_console(1)
-        
-        if opcao == 1: # Relatórios
+        try:
+            print(config.MENU_PRINCIPAL)
+            opcao = int(input("Escolha uma opção [1-5]: "))
+            config.clear_console(1)
             
-            print(config.MENU_RELATORIOS)
-            opcao_relatorio = int(input("Escolha uma opção [0-4]: "))
-            config.clear_console(1)
+            if opcao == 1: # Relatórios
+                
+                print(config.MENU_RELATORIOS)
+                opcao_relatorio = int(input("Escolha uma opção [0-4]: "))
+                config.clear_console(1)
 
-            reports(opcao_relatorio)
+                reports(opcao_relatorio)
 
-            config.clear_console(1)
+                config.clear_console(1)
 
-        elif opcao == 2: # Inserir Novos Registros
-            
-            print(config.MENU_ENTIDADES)
-            opcao_inserir = int(input("Escolha uma opção [1-4]: "))
-            config.clear_console(1)
+            elif opcao == 2: # Inserir Novos Registros
+                
+                print(config.MENU_ENTIDADES)
+                opcao_inserir = int(input("Escolha uma opção [1-4]: "))
+                config.clear_console(1)
 
-            inserir(opcao_inserir=opcao_inserir)
+                inserir(opcao_inserir=opcao_inserir)
 
-            config.clear_console()
-            print(tela_inicial.get_updated_screen())
-            config.clear_console()
+                config.clear_console()
+                print(tela_inicial.get_updated_screen())
+                config.clear_console()
 
-        elif opcao == 3: # Atualizar Registros
+            elif opcao == 3: # Atualizar Registros
 
-            print(config.MENU_ENTIDADES)
-            opcao_atualizar = int(input("Escolha uma opção [1-4]: "))
-            config.clear_console(1)
+                print(config.MENU_ENTIDADES)
+                opcao_atualizar = int(input("Escolha uma opção [1-4]: "))
+                config.clear_console(1)
 
-            atualizar(opcao_atualizar=opcao_atualizar)
+                atualizar(opcao_atualizar=opcao_atualizar)
 
-            config.clear_console()
+                config.clear_console()
 
-        elif opcao == 4:
+            elif opcao == 4: # Excluir Registros
 
-            print(config.MENU_ENTIDADES)
-            opcao_excluir = int(input("Escolha uma opção [1-4]: "))
-            config.clear_console(1)
+                print(config.MENU_ENTIDADES)
+                opcao_excluir = int(input("Escolha uma opção [1-4]: "))
+                config.clear_console(1)
 
-            excluir(opcao_excluir=opcao_excluir)
+                excluir(opcao_excluir=opcao_excluir)
 
-            config.clear_console()
-            print(tela_inicial.get_updated_screen())
-            config.clear_console()
+                config.clear_console()
+                print(tela_inicial.get_updated_screen())
+                config.clear_console()
 
-        elif opcao == 5:
+            elif opcao == 5: # Sair do Sistema
 
-            print(tela_inicial.get_updated_screen())
-            config.clear_console()
-            print("Obrigado por utilizar o nosso sistema.")
+                print(tela_inicial.get_updated_screen())
+                config.clear_console()
+                exit(0)
+
+            else:
+                print("Escolha uma opção entre 1-5. \n\n")
+
+        except KeyboardInterrupt:
+            print("\n\nObrigado por utilizar o nosso sistema. \n\n")
             exit(0)
 
-        else:
-            print("Opção incorreta.")
-            exit(1)
+        except SystemExit:
+            print("\n\nObrigado por utilizar o nosso sistema. \n\n")
+            exit(0)
+
+        # Captura erro de tipo
+        except ValueError:
+            print("\n\nOpção incorreta. Tente novamente. \n\n")
+        
+        # Captura erro genérico
+        except Exception as err:
+            print("\n\n Erro:", err)
 
 if __name__ == "__main__":
     run()
