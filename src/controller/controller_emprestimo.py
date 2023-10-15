@@ -175,8 +175,35 @@ class Controller_Emprestimo:
             print(f"O empréstimo de código {codigo_emprestimo} não existe na base.")
             return None
         else:
-            return Controller_Emprestimo.get_emprestimo_from_dataframe(oracle, codigo_emprestimo)
+            return Controller_Emprestimo.get_emprestimo_from_dataframe(oracle, codigo_emprestimo)        
+
+    @staticmethod
+    def verifica_emprestimo_aberto(oracle:OracleQueries, id_emprestimo:int=None) -> bool:
+        # Recupera os dados da nova entidade criada transformando em um DataFrame
+        dataframe = oracle.sqlToDataFrame(f"""
+            SELECT
+                empr.id_emprestimo,
+                CASE 
+                    WHEN 
+                        EXISTS (
+                            SELECT
+                            1
+                            FROM
+                            devolucoes devo
+                            WHERE
+                            devo.id_emprestimo = empr.id_emprestimo
+                        )
+                    THEN 1
+                    ELSE 0
+                END as devolucao_realizada
+            FROM emprestimos empr
+            WHERE empr.id_emprestimo = {id_emprestimo}
+        """)
+        if dataframe.empty:
+            return False
         
+        return int(dataframe.devolucao_realizada.values[0]) == 0
+
     @staticmethod
     def valida_data_format(data_string:str=None) -> bool:
         try:

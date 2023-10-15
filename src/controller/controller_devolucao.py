@@ -59,10 +59,19 @@ class Controller_Devolucao:
 
         # Verifica se a entidade existe na base de dados
         if Controller_Devolucao.verifica_existencia_devolucao(oracle, id_devolucao):
+            devolucao_original = Controller_Devolucao.get_devolucao_from_dataframe(oracle, id_devolucao)
+
             self.relatorio.get_relatorio_emprestimos()
             codigo_emprestimo = str(input("\nDigite o novo código do empréstimo: "))
+
             emprestimo = Controller_Emprestimo.valida_emprestimo(oracle, codigo_emprestimo)
             if emprestimo == None:
+                return None
+            
+            if int(codigo_emprestimo) == devolucao_original.get_emprestimo().get_id_emprestimo():
+                print("O empréstimo se manteve o mesmo.")
+            elif not Controller_Emprestimo.verifica_emprestimo_aberto(oracle, codigo_emprestimo):
+                print("O empréstimo digitado não está em aberto (já possui devolução). Tente novamente com um empréstimo em aberto.")
                 return None
 
             data_devolucao = input("Digite a nova Data da devolução (DD/MM/YYYY): ")
@@ -130,7 +139,7 @@ class Controller_Devolucao:
 
         print("\n")
 
-        if not Controller_Devolucao.valida_emprestimo_aberto(oracle, codigo_usuario, codigo_emprestimo):
+        if not Controller_Devolucao.valida_emprestimo_aberto_por_usuario(oracle, codigo_usuario, codigo_emprestimo):
             print(f"Não foi encontrado neste usuário um empréstimo em aberto com código {codigo_emprestimo}")
             return None
 
@@ -156,7 +165,7 @@ class Controller_Devolucao:
         return Devolucao(int(df_devolucao.id_devolucao.values[0]), emprestimo, df_devolucao.data_devolucao.values[0])
     
     @staticmethod
-    def valida_emprestimo_aberto(oracle:OracleQueries, id_usuario:int=None, id_emprestimo:int=None) -> bool:
+    def valida_emprestimo_aberto_por_usuario(oracle:OracleQueries, id_usuario:int=None, id_emprestimo:int=None) -> bool:
         # Recupera os dados da nova entidade criada transformando em um DataFrame
         dataframe = oracle.sqlToDataFrame(f"SELECT empr.* FROM emprestimos empr LEFT JOIN devolucoes devol ON empr.id_emprestimo = devol.id_emprestimo WHERE devol.id_emprestimo IS NULL AND empr.id_usuario = {id_usuario} AND empr.id_emprestimo = {id_emprestimo}")
         return not dataframe.empty

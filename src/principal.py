@@ -46,6 +46,7 @@ def inserir(opcao_inserir:int=0):
         continuar = input("Deseja fazer mais uma inserção? (S/N): ")
         if continuar.strip().lower() != "s":
             break
+        config.clear_console(0)
             
 
 def atualizar(opcao_atualizar:int=0):
@@ -70,6 +71,7 @@ def atualizar(opcao_atualizar:int=0):
         continuar = input("Deseja fazer mais uma atualização? (S/N): ")
         if continuar.strip().lower() != "s":
             break
+        config.clear_console(0)
 
 def excluir(opcao_excluir:int=0):
 
@@ -93,6 +95,7 @@ def excluir(opcao_excluir:int=0):
         continuar = input("Deseja fazer mais uma exclusão? (S/N): ")
         if continuar.strip().lower() != "s":
             break
+        config.clear_console(0)
 
 def run():
     print(tela_inicial.get_updated_screen())
@@ -122,7 +125,7 @@ def run():
 
                 inserir(opcao_inserir=opcao_inserir)
 
-                config.clear_console()
+                config.clear_console(0)
                 print(tela_inicial.get_updated_screen())
                 config.clear_console()
 
@@ -134,7 +137,7 @@ def run():
 
                 atualizar(opcao_atualizar=opcao_atualizar)
 
-                config.clear_console()
+                config.clear_console(0)
                 print(tela_inicial.get_updated_screen())
                 config.clear_console()
 
@@ -145,7 +148,7 @@ def run():
 
                 excluir(opcao_excluir=opcao_excluir)
 
-                config.clear_console()
+                config.clear_console(0)
                 print(tela_inicial.get_updated_screen())
                 config.clear_console()
 
