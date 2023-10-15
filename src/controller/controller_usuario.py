@@ -80,16 +80,28 @@ class Controller_Usuario:
         id_usuario = int(input("Código do Usuário que irá excluir: "))        
 
         # Verifica se a entidade existe na base de dados
-        if Controller_Usuario.verifica_existencia_usuario(oracle, id_usuario):            
-            # Recupera os dados da entidade e cria um novo objeto para informar que foi removido
-            usuario_excluido = Controller_Usuario.get_usuario_from_dataframe(oracle, id_usuario)
-            # Remove da tabela
-            oracle.write(f"delete from usuarios where id_usuario = {id_usuario}")
-            # Exibe os atributos do objeto excluído
-            print("Usuario Removido com Sucesso!")
-            print(usuario_excluido.to_string())
-        else:
+        if not Controller_Usuario.verifica_existencia_usuario(oracle, id_usuario):
             print(f"O código {id_usuario} não existe.")
+        
+        usuario_chave_estrangeira = oracle.sqlToDataFrame(f"select id_usuario from emprestimos where id_usuario = {id_usuario}")
+        
+        if not usuario_chave_estrangeira.empty:
+            print(f"O usuário de código {id_usuario} possui registros dependentes. Deseja excluir mesmo assim? [S/N]")
+            opcao = input()
+
+            if opcao.upper() != "S":
+                print("Operação cancelada.")
+                return None
+            
+            print("Excluindo registros dependentes...")
+
+        # Recupera os dados da entidade e cria um novo objeto para informar que foi removido
+        usuario_excluido = Controller_Usuario.get_usuario_from_dataframe(oracle, id_usuario)
+        # Revome da tabela
+        oracle.write(f"delete from usuarios where id_usuario = {id_usuario}")
+        # Exibe os atributos do objeto excluído
+        print("Usuario Removido com Sucesso!")
+        print(usuario_excluido.to_string())
 
     @staticmethod
     def verifica_existencia_usuario(oracle:OracleQueries, id_usuario:int=None) -> bool:

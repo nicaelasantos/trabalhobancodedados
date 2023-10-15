@@ -94,16 +94,28 @@ class Controller_Livro:
         id_livro = int(input("Código do Livro que irá excluir: "))        
 
         # Verifica se a entidade existe na base de dados
-        if Controller_Livro.verifica_existencia_livro(oracle, id_livro):            
-            # Recupera os dados da entidade e cria um novo objeto para informar que foi removido
-            livro_excluido = Controller_Livro.get_livro_from_dataframe(oracle, id_livro)
-            # Revome da tabela
-            oracle.write(f"delete from livros where id_livro = {id_livro}")            
-            # Exibe os atributos do objeto excluído
-            print("Livro Removido com Sucesso!")
-            print(livro_excluido.to_string())
-        else:
+        if not Controller_Livro.verifica_existencia_livro(oracle, id_livro):            
             print(f"O código {id_livro} não existe.")
+
+        livro_chave_estrangeira = oracle.sqlToDataFrame(f"select id_livro from emprestimos where id_livro = {id_livro}")
+
+        if not livro_chave_estrangeira.empty:
+            print(f"O livro de código {id_livro} possui registros dependentes. Deseja excluir mesmo assim? [S/N]")
+            opcao = input()
+
+            if opcao.upper() != "S":
+                print("Operação cancelada.")
+                return None
+
+            print("Excluindo registros dependentes...")
+
+        # Recupera os dados da entidade e cria um novo objeto para informar que foi removido
+        livro_excluido = Controller_Livro.get_livro_from_dataframe(oracle, id_livro)
+        # Revome da tabela
+        oracle.write(f"delete from livros where id_livro = {id_livro}")            
+        # Exibe os atributos do objeto excluído
+        print("Livro Removido com Sucesso!")
+        print(livro_excluido.to_string())
 
     @staticmethod
     def verifica_existencia_livro(oracle:OracleQueries, id_livro:int=None) -> bool:
