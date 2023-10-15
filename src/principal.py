@@ -25,7 +25,7 @@ def reports(opcao_relatorio:int=0):
             relatorio.get_relatorio_devolucoes()
         if opcao_relatorio == 5:
             relatorio.get_relatorio_livros_disponiveis() 
-            
+
         input("\nPressione Enter para fechar o relatório")
 
 def inserir(opcao_inserir:int=0):
@@ -134,6 +134,8 @@ def run():
 
                 atualizar(opcao_atualizar=opcao_atualizar)
 
+                config.clear_console()
+                print(tela_inicial.get_updated_screen())
                 config.clear_console()
 
             elif opcao == 4: # Excluir Registros
