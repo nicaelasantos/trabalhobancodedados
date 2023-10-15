@@ -53,7 +53,6 @@ def atualizar(opcao_atualizar:int=0):
         devolucao_atualizada = ctrl_devolucao.atualizar_devolucao()
 
 def excluir(opcao_excluir:int=0):
-
     if opcao_excluir == 1:
         relatorio.get_relatorio_livros()
         ctrl_livro.excluir_livro()

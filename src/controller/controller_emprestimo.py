@@ -97,15 +97,27 @@ class Controller_Emprestimo:
 
         # Verifica se a entidade existe na base de dados
         if Controller_Emprestimo.verifica_existencia_emprestimo(oracle, id_emprestimo):            
-            # Recupera os dados da entidade e cria um novo objeto para informar que foi removido
-            emprestimo_excluido = Controller_Emprestimo.get_emprestimo_from_dataframe(oracle, id_emprestimo)
-            # Revome da tabela
-            oracle.write(f"delete from emprestimos where id_emprestimo = {id_emprestimo}")
-            # Exibe os atributos do objeto excluído
-            print("Empréstimo removido com Sucesso!")
-            print(emprestimo_excluido.to_string())
-        else:
             print(f"O código de empréstimo {id_emprestimo} não existe.")
+
+        emprestimo_chave_estrangeira = oracle.sqlToDataFrame(f"select id_emprestimo from devolucoes where id_emprestimo = {id_emprestimo}")
+        
+        if not emprestimo_chave_estrangeira.empty:
+            print(f"O empréstimo de código {id_emprestimo} possui registros dependentes. Deseja excluir mesmo assim? [S/N]")
+            opcao = input()
+
+            if opcao.upper() != "S":
+                print("Operação cancelada.")
+                return None
+            
+            print("Excluindo registros dependentes...")
+
+        # Recupera os dados da entidade e cria um novo objeto para informar que foi removido
+        emprestimo_excluido = Controller_Emprestimo.get_emprestimo_from_dataframe(oracle, id_emprestimo)
+        # Revome da tabela
+        oracle.write(f"delete from emprestimos where id_emprestimo = {id_emprestimo}")
+        # Exibe os atributos do objeto excluído
+        print("Empréstimo removido com Sucesso!")
+        print(emprestimo_excluido.to_string())
 
     def cadastrar_emprestimo(self, oracle) -> Emprestimo:
         #Solicita os dados de cadastro

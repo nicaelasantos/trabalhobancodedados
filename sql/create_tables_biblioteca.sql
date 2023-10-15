@@ -38,8 +38,8 @@ CREATE TABLE Emprestimos (
   id_usuario NUMBER NOT NULL,
   data_emprestimo DATE NOT NULL,
   data_devolucao_sugerida DATE NOT NULL,
-  FOREIGN KEY (id_livro) REFERENCES Livros(id_livro),
-  FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario)
+  FOREIGN KEY (id_livro) REFERENCES Livros(id_livro) ON DELETE CASCADE,
+  FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE
 );
 
 -- Cria tabela "Devoluções"
@@ -48,7 +48,7 @@ CREATE TABLE Devolucoes (
   id_emprestimo NUMBER NOT NULL,
   data_devolucao DATE NOT NULL,
   --multa NUMBER(10, 2), --Nulo ou zero caso não haja multa
-  FOREIGN KEY (id_emprestimo) REFERENCES Emprestimos(id_emprestimo)
+  FOREIGN KEY (id_emprestimo) REFERENCES Emprestimos(id_emprestimo) ON DELETE CASCADE
 );
 
 -- Cria as sequences
