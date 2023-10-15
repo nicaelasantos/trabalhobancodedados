@@ -16,7 +16,7 @@ class Controller_Usuario:
         output_value = cursor.var(int)
 
         #Solicita os dados de cadastro
-        print("Insira os dados do usuário.\n")
+        print("\nInsira os dados do usuário.\n")
         nome = input("Nome: ")
         email = input("Email: ")
         telefone = input("Telefone: ")
