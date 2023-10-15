@@ -16,7 +16,7 @@ class Controller_Usuario:
         output_value = cursor.var(int)
 
         #Solicita os dados de cadastro
-        print("Insira os dados do usuário.\n")
+        print("\nInsira os dados do usuário.\n")
         nome = input("Nome: ")
         email = input("Email: ")
         telefone = input("Telefone: ")
@@ -83,7 +83,7 @@ class Controller_Usuario:
         if Controller_Usuario.verifica_existencia_usuario(oracle, id_usuario):            
             # Recupera os dados da entidade e cria um novo objeto para informar que foi removido
             usuario_excluido = Controller_Usuario.get_usuario_from_dataframe(oracle, id_usuario)
-            # Revome da tabela
+            # Remove da tabela
             oracle.write(f"delete from usuarios where id_usuario = {id_usuario}")
             # Exibe os atributos do objeto excluído
             print("Usuario Removido com Sucesso!")

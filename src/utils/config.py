@@ -11,6 +11,7 @@ MENU_RELATORIOS = """Relatórios
 2 - Relatório de Usuários
 3 - Relatório de Empréstimos
 4 - Relatório de Devoluções
+5 - Relatório de Livros Disponíveis
 0 - Sair
 """
 
@@ -32,7 +33,7 @@ def clear_console(wait_time:int=3):
    import os
    from time import sleep
    import sys
-   #sleep(wait_time)
+   sleep(wait_time)
 
    print("\n\n")
    print("==============================================================================")
@@ -40,7 +41,7 @@ def clear_console(wait_time:int=3):
    print("==============================================================================")
    print("\n\n")
 
-   return #desabilita o clear temporariamente para debugar
+   #desabilita o clear temporariamente para debugar
    if 'win32' in sys.platform:
       os.system("cls")
    else:

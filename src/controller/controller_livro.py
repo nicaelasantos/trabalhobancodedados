@@ -17,7 +17,7 @@ class Controller_Livro:
         output_value = cursor.var(int)
 
         #Solicita ao usuario os dados do livro
-        print("Insira os dados do livro a ser cadastrado.\n")
+        print("\nInsira os dados do livro a ser cadastrado.\n")
         titulo_novo_livro = input("Título: ")
         autor_novo_livro = input("Autor: ")
         ano_novo_livro = int(input("Ano de publicação (número): "))
