@@ -102,20 +102,26 @@ class Controller_Devolucao:
         oracle.connect()
 
         # Solicita ao usuário o código da entidade a ser alterada
-        id_devolucao = int(input("Código da Devolução que irá excluir: "))        
+        id_devolucao = int(input("Código da Devolução que irá excluir: "))  
 
         # Verifica se a entidade existe na base de dados
-        if Controller_Devolucao.verifica_existencia_devolucao(oracle, id_devolucao):            
-            # Recupera os dados da entidade e cria um novo objeto para informar que foi removido
-            devolucao_excluida = Controller_Devolucao.get_devolucao_from_dataframe(oracle, id_devolucao)
-            # Revome da tabela
-            oracle.write(f"delete from devolucoes where id_devolucao = {id_devolucao}")
-            # Exibe os atributos do objeto excluído
-            print("Devolução removida com Sucesso!")
-            print(devolucao_excluida.to_string())
-        else:
+        if not Controller_Devolucao.verifica_existencia_devolucao(oracle, id_devolucao):  
             print(f"O código de Devolução {id_devolucao} não existe.")
-
+            return None
+        
+        # Confirma se o usuário realmente deseja excluir o item selecionado
+        confirmar_exclusao = input("Deseja realmente continuar com a exclusão? (S/N): ")
+        if confirmar_exclusao.strip().lower() != "s":
+            return None
+        
+        # Recupera os dados da entidade e cria um novo objeto para informar que foi removido
+        devolucao_excluida = Controller_Devolucao.get_devolucao_from_dataframe(oracle, id_devolucao)
+        # Revome da tabela
+        oracle.write(f"delete from devolucoes where id_devolucao = {id_devolucao}")
+        # Exibe os atributos do objeto excluído
+        print("Devolução removida com Sucesso!")
+        print(devolucao_excluida.to_string())
+            
     def cadastrar_devolucao(self, oracle) -> Devolucao:
         #Solicita os dados de cadastro
         print("Informe os dados solicitado para cadastrar a devolução.\n")
