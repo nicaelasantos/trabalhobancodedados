@@ -102,7 +102,12 @@ class Controller_Devolucao:
         oracle.connect()
 
         # Solicita ao usuário o código da entidade a ser alterada
-        id_devolucao = int(input("Código da Devolução que irá excluir: "))        
+        id_devolucao = int(input("Código da Devolução que irá excluir: "))  
+
+        # Confirma se o usuário realmente deseja excluir o item selecionado
+        confirmar_exclusao = input("Deseja realmente continuar com a exclusão? (S/N): ")
+        if confirmar_exclusao.strip().lower() != "s":
+            return None      
 
         # Verifica se a entidade existe na base de dados
         if Controller_Devolucao.verifica_existencia_devolucao(oracle, id_devolucao):            

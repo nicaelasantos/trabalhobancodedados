@@ -110,7 +110,7 @@ def run():
             if opcao == 1: # Relatórios
                 
                 print(config.MENU_RELATORIOS)
-                opcao_relatorio = int(input("Escolha uma opção [0-4]: "))
+                opcao_relatorio = int(input("Escolha uma opção [0-5]: "))
                 config.clear_console(1)
 
                 reports(opcao_relatorio)

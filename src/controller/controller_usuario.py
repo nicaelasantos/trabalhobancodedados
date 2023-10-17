@@ -77,7 +77,12 @@ class Controller_Usuario:
         oracle.connect()
 
         # Solicita ao usuário o código da entidade a ser alterada
-        id_usuario = int(input("Código do Usuário que irá excluir: "))        
+        id_usuario = int(input("Código do Usuário que irá excluir: "))  
+
+        # Confirma se o usuário realmente deseja excluir o item selecionado
+        confirmar_exclusao = input("Deseja realmente continuar com a exclusão? (S/N): ")
+        if confirmar_exclusao.strip().lower() != "s":
+            return None      
 
         # Verifica se a entidade existe na base de dados
         if not Controller_Usuario.verifica_existencia_usuario(oracle, id_usuario):
