@@ -19,33 +19,61 @@ class Relatorio:
             self.query_relatorio_devolucoes = f.read()
 
 
-    def get_relatorio_livros(self):
+    def get_relatorio_livros(self) -> bool:
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Recupera os dados transformando em um DataFrame
-        print(oracle.sqlToDataFrame(self.query_relatorio_livros))
+        dataframe = oracle.sqlToDataFrame(self.query_relatorio_livros)
 
-    def get_relatorio_livros_disponiveis(self):
+        if dataframe.empty:
+            print("A tabela Livros não possui registros.")
+            return False
+        
+        print(dataframe)
+        return True
+    
+    def get_relatorio_livros_disponiveis(self) -> bool:
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Recupera os dados transformando em um DataFrame
-        print(oracle.sqlToDataFrame(self.query_relatorio_livros_disponiveis))
+        dataframe = oracle.sqlToDataFrame(self.query_relatorio_livros_disponiveis)
 
+        if dataframe.empty:
+            print("A tabela Livros não possui registros.")
+            return False
+        
+        print(dataframe)
+        return True
+    
     def get_relatorio_usuarios(self):
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Recupera os dados transformando em um DataFrame
-        print(oracle.sqlToDataFrame(self.query_relatorio_usuarios))
+        dataframe = oracle.sqlToDataFrame(self.query_relatorio_usuarios)
 
-    def get_relatorio_emprestimos(self):
+        if dataframe.empty:
+            print("A tabela Usuarios não possui registros.")
+            return False
+        
+        print(dataframe)
+        return True
+
+    def get_relatorio_emprestimos(self) -> bool:
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Recupera os dados transformando em um DataFrame
-        print(oracle.sqlToDataFrame(self.query_relatorio_emprestimos))
+        dataframe = oracle.sqlToDataFrame(self.query_relatorio_emprestimos)
+
+        if dataframe.empty:
+            print("A tabela Emprestimos não possui registros.")
+            return False
+        
+        print(dataframe)
+        return True
 
     def get_relatorio_emprestimos_pendentes_por_usuario(self, codigo_usuario) -> bool:        
         # Cria uma nova conexão com o banco que permite alteração
@@ -62,9 +90,16 @@ class Relatorio:
         #retorna se a consulta foi vazia, para saber se existem registros baseados neste usuario
         return not dataframe.empty
     
-    def get_relatorio_devolucoes(self):
+    def get_relatorio_devolucoes(self) -> bool:
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
         # Recupera os dados transformando em um DataFrame
-        print(oracle.sqlToDataFrame(self.query_relatorio_devolucoes))
+        dataframe = oracle.sqlToDataFrame(self.query_relatorio_devolucoes)
+
+        if dataframe.empty:
+            print("A tabela Devolucoes não possui registros.")
+            return False
+        
+        print(dataframe)
+        return True

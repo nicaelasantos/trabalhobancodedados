@@ -49,20 +49,24 @@ def inserir(opcao_inserir:int=0):
         config.clear_console(0)
             
 
-def atualizar(opcao_atualizar:int=0):
+def atualizar(opcao_atualizar:int=0) -> bool:
 
     while True:
         if opcao_atualizar == 1:
-            relatorio.get_relatorio_livros()
+            if not relatorio.get_relatorio_livros():
+                return False
             livro_atualizado = ctrl_livro.atualizar_livro()
         elif opcao_atualizar == 2:
-            relatorio.get_relatorio_usuarios()
+            if not relatorio.get_relatorio_usuarios():
+                return False
             usuario_atualizado = ctrl_usuario.atualizar_usuario()
         elif opcao_atualizar == 3:
-            relatorio.get_relatorio_emprestimos()
+            if not relatorio.get_relatorio_emprestimos():
+                return False
             emprestimo_atualizado = ctrl_emprestimo.atualizar_emprestimo()
         elif opcao_atualizar == 4:
-            relatorio.get_relatorio_devolucoes()
+            if not relatorio.get_relatorio_devolucoes():
+                return False
             devolucao_atualizada = ctrl_devolucao.atualizar_devolucao()
         else:
             print("Opção inválida. Tente novamente.")
@@ -72,21 +76,26 @@ def atualizar(opcao_atualizar:int=0):
         if continuar.strip().lower() != "s":
             break
         config.clear_console(0)
+    return True
 
-def excluir(opcao_excluir:int=0):
+def excluir(opcao_excluir:int=0) -> bool:
 
     while True:
         if opcao_excluir == 1:
-            relatorio.get_relatorio_livros()
+            if not relatorio.get_relatorio_livros():
+                return False
             ctrl_livro.excluir_livro()
         elif opcao_excluir == 2:
-            relatorio.get_relatorio_usuarios()
+            if not relatorio.get_relatorio_usuarios():
+                return False
             ctrl_usuario.excluir_usuario()
         elif opcao_excluir == 3:
-            relatorio.get_relatorio_emprestimos()
+            if not relatorio.get_relatorio_emprestimos():
+                return False
             ctrl_emprestimo.excluir_emprestimo()
         elif opcao_excluir == 4:
-            relatorio.get_relatorio_devolucoes()
+            if not relatorio.get_relatorio_devolucoes():
+                return False
             ctrl_devolucao.excluir_devolucao()
         else:
             print("Opção inválida. Tente novamente.")
@@ -96,6 +105,7 @@ def excluir(opcao_excluir:int=0):
         if continuar.strip().lower() != "s":
             break
         config.clear_console(0)
+    return True
 
 def run():
     print(tela_inicial.get_updated_screen())
@@ -135,9 +145,11 @@ def run():
                 opcao_atualizar = int(input("Escolha uma opção [1-4]: "))
                 config.clear_console(1)
 
-                atualizar(opcao_atualizar=opcao_atualizar)
+                if not atualizar(opcao_atualizar=opcao_atualizar):
+                    config.clear_console()
+                else:
+                    config.clear_console(0)
 
-                config.clear_console(0)
                 print(tela_inicial.get_updated_screen())
                 config.clear_console()
 
@@ -146,9 +158,11 @@ def run():
                 opcao_excluir = int(input("Escolha uma opção [1-4]: "))
                 config.clear_console(1)
 
-                excluir(opcao_excluir=opcao_excluir)
+                if not excluir(opcao_excluir=opcao_excluir):
+                    config.clear_console()
+                else:
+                    config.clear_console(0)
 
-                config.clear_console(0)
                 print(tela_inicial.get_updated_screen())
                 config.clear_console()
 
