@@ -95,14 +95,14 @@ class Controller_Emprestimo:
         # Solicita ao usuário o código da entidade a ser alterada
         id_emprestimo = int(input("Código do Empréstimo que irá excluir: ")) 
 
-        # Confirma se o usuário realmente deseja excluir o item selecionado
-        confirmar_exclusao = input("Deseja realmente continuar com a exclusão? (S/N): ")
-        if confirmar_exclusao.strip().lower() != "s":
-            return None       
-
         # Verifica se a entidade existe na base de dados
         if not Controller_Emprestimo.verifica_existencia_emprestimo(oracle, id_emprestimo):            
             print(f"O código de empréstimo {id_emprestimo} não existe.")
+
+        # Confirma se o usuário realmente deseja excluir o item selecionado
+        confirmar_exclusao = input("Deseja realmente continuar com a exclusão? (S/N): ")
+        if confirmar_exclusao.strip().lower() != "s":
+            return None
 
         emprestimo_chave_estrangeira = oracle.sqlToDataFrame(f"select id_emprestimo from devolucoes where id_emprestimo = {id_emprestimo}")
         

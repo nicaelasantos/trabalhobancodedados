@@ -93,14 +93,14 @@ class Controller_Livro:
         # Solicita ao usuário o código da entidade a ser alterada
         id_livro = int(input("Código do Livro que irá excluir: "))        
 
+        # Verifica se a entidade existe na base de dados
+        if not Controller_Livro.verifica_existencia_livro(oracle, id_livro):            
+            print(f"O código {id_livro} não existe.")
+
         # Confirma se o usuário realmente deseja excluir o item selecionado
         confirmar_exclusao = input("Deseja realmente continuar com a exclusão? (S/N): ")
         if confirmar_exclusao.strip().lower() != "s":
             return None
-
-        # Verifica se a entidade existe na base de dados
-        if not Controller_Livro.verifica_existencia_livro(oracle, id_livro):            
-            print(f"O código {id_livro} não existe.")
 
         livro_chave_estrangeira = oracle.sqlToDataFrame(f"select id_livro from emprestimos where id_livro = {id_livro}")
 
