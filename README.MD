@@ -54,6 +54,9 @@ python test.py
 
 - O "`principal.py`" atua como a interface entre o usuário e os módulos de acesso ao banco de dados, e deve ser executado após a criação das tabelas para garantir o funcionamento adequado do sistema.
 
+## Vídeo demonstrativo 🎬
+[`Acesse aqui`](https://www.youtube.com/watch?v=xRB0KWsuqss) o vídeo demonstrativo da aplicação
+
 ## 🤝 Colaboradores
 
 <table>
