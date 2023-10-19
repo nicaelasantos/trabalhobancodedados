@@ -9,9 +9,6 @@ from conexion.oracle_queries import OracleQueries
 
 from reports.relatorios import Relatorio
 
-# Configuração para exibição de datas no formato brasileiro
-locale.setlocale(locale.LC_ALL, "pt-BR")
-
 class Controller_Emprestimo:
 
     def __init__(self):
@@ -239,8 +236,8 @@ class Controller_Emprestimo:
 
             if data_devolucao < data_entrega:
                 # Formata a data para exibição
-                data_entrega_formatada = data_entrega.strftime('%x')
-                data_devolucao_formatada = data_devolucao.strftime('%x')
+                data_entrega_formatada = data_entrega.strftime('%d/%m/%Y')
+                data_devolucao_formatada = data_devolucao.strftime('%d/%m/%Y')
                 # Exibe mensagem de erro
                 raise Exception(f"Data de Devolução ({data_devolucao_formatada}) menor que a Data de Entrega ({data_entrega_formatada})")
 
