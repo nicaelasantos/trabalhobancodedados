@@ -9,7 +9,7 @@ Antes de começar, verifique se você atendeu aos seguintes requisitos:
 ## Executando o Sistema 🚀
 Clone o repositório `biblioteca_crud_oracle` para o seu computador usando o seguinte comando:
 ```git
-git clone https://github.com/gustavopradobr/biblioteca_crud_oracle.git
+git clone (adicionar o link)
 ```
 Após realizar o download do projeto, execute o seguinte comando no terminal: 
 ```shell
@@ -56,34 +56,3 @@ python test.py
 
 ## Vídeo demonstrativo 🎬
 [`Acesse aqui`](https://www.youtube.com/watch?v=xRB0KWsuqss) o vídeo demonstrativo da aplicação
-
-## 🤝 Colaboradores
-
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/luizfelipemacedo">
-        <img src="https://github.com/luizfelipemacedo.png" width="100px;" alt="Foto de Luiz Felipe"/><br>
-        <sub>
-          <b>Luiz Felipe Macedo</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/gustavopradobr">
-        <img src="https://github.com/gustavopradobr.png" width="100px;" alt="Foto de Gustavo"/><br>
-        <sub>
-          <b>Gustavo Prado</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/pedrohmarinho">
-        <img src="https://github.com/pedrohmarinho.png" width="100px;" alt="Foto de Pedro"/><br>
-        <sub>
-          <b>Pedro Marinho</b>
-        </sub>
-      </a>
-    </td>
-  </tr>
-</table>

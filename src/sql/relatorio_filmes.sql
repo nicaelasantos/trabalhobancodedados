@@ -1,6 +1,5 @@
 select filme.id_filme
-     , filme.titulo 
-     , filme.autor 
+     , filme.titulo  
      , filme.ano_publicacao 
      , filme.quantidade 
      , filme.disponibilidade 
