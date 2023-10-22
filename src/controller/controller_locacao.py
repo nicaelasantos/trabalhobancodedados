@@ -1,22 +1,22 @@
 import datetime
 import locale
-from model.emprestimo import Emprestimo
-from model.livro import Livro
+from model.locacao import Locacao
+from model.filme import Filme
 from model.usuario import Usuario
-from controller.controller_livro import Controller_Livro
+from controller.controller_filme import controller_Filme
 from controller.controller_usuario import Controller_Usuario
 from conexion.oracle_queries import OracleQueries
 
 from reports.relatorios import Relatorio
 
-class Controller_Emprestimo:
+class Controller_Locacao:
 
     def __init__(self):
         self.relatorio = Relatorio()
         self.ctrl_usuario = Controller_Usuario()
-        self.ctrl_livro = Controller_Livro()
+        self.ctrl_filme = controller_Filme()
 
-    def inserir_emprestimo(self) -> Emprestimo:
+    def inserir_locacao(self) -> Locacao:
         ''' Ref.: https://cx-oracle.readthedocs.io/en/latest/user_guide/plsql_execution.html#anonymous-pl-sql-blocks'''
         
         # Cria uma nova conexão com o banco
@@ -26,85 +26,85 @@ class Controller_Emprestimo:
         # Cria a variável de saída com o tipo especificado
         output_value = cursor.var(int)
 
-        emprestimo_cadastrado = self.cadastrar_emprestimo(oracle)
-        if(emprestimo_cadastrado == None):
+        locacao_cadastrada = self.cadastrar_locacao(oracle)
+        if(locacao_cadastrada == None):
             return None
 
-        id_livro = emprestimo_cadastrado.get_livro().get_id_livro()
-        id_usuario = emprestimo_cadastrado.get_usuario().get_id_usuario()
-        data_emprestimo = emprestimo_cadastrado.get_data_emprestimo()
-        data_devolucao_sugerida = emprestimo_cadastrado.get_data_devolucao()
+        id_filme = locacao_cadastrada.get_filme().get_id_filme()
+        id_usuario = locacao_cadastrada.get_usuario().get_id_usuario()
+        data_locacao = locacao_cadastrada.get_data_locacao()
+        data_devolucao_sugerida = locacao_cadastrada.get_data_devolucao()
 
         # Cria um dicionário para mapear as variáveis de entrada e saída
-        data = dict(codigo=output_value, id_livro=int(id_livro), id_usuario=int(id_usuario), data_emprestimo=data_emprestimo, data_devolucao_sugerida=data_devolucao_sugerida)
+        data = dict(codigo=output_value, id_filme=int(id_filme), id_usuario=int(id_usuario), data_locacao=data_locacao, data_devolucao_sugerida=data_devolucao_sugerida)
         # Executa o bloco PL/SQL anônimo para inserção do novo objeto e recuperação da chave primária criada pela sequence
         cursor.execute("""
         begin
-            :codigo := EMPRESTIMOS_ID_EMPRESTIMO_SEQ.NEXTVAL;
-            insert into emprestimos values(:codigo, :id_livro, :id_usuario, to_date(:data_emprestimo,'DD/MM/YYYY'), to_date(:data_devolucao_sugerida,'DD/MM/YYYY'));
+            :codigo := LOCACOES_ID_LOCACAO_SEQ.NEXTVAL;
+            insert into locacoes values(:codigo, :id_filme, :id_usuario, to_date(:data_locacao,'DD/MM/YYYY'), to_date(:data_devolucao_sugerida,'DD/MM/YYYY'));
         end;
         """, data)
         # Recupera o código da nova entidade
-        id_emprestimo = output_value.getvalue()
+        id_locacao = output_value.getvalue()
         # Persiste (confirma) as alterações
         oracle.conn.commit()
         # Recupera os dados da nova entidade criada transformando em um DataFrame
-        novo_emprestimo = Controller_Emprestimo.get_emprestimo_from_dataframe(oracle, id_emprestimo)
+        novo_locacao = Controller_Locacao.get_locacao_from_dataframe(oracle, id_locacao)
         # Exibe os atributos do novo objeto
-        print(novo_emprestimo.to_string())
+        print(novo_locacao.to_string())
         # Retorna o objeto para utilização posterior, caso necessário
-        return novo_emprestimo
+        return novo_locacao
 
-    def atualizar_emprestimo(self) -> Emprestimo:
+    def atualizar_locacao(self) -> Locacao:
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries(can_write=True)
         oracle.connect()
 
         # Solicita ao usuário o código da entidade a ser alterada
-        id_emprestimo = int(input("Código do Empréstimo que irá alterar: "))        
+        id_locacao = int(input("Código da locacao que irá alterar: "))        
 
         # Verifica se a entidade existe na base de dados
-        if Controller_Emprestimo.verifica_existencia_emprestimo(oracle, id_emprestimo):
-            emprestimo_cadastrado = self.cadastrar_emprestimo(oracle)
-            if(emprestimo_cadastrado == None):
+        if Controller_Locacao.verifica_existencia_locacao(oracle, id_locacao):
+            locacao_cadastrado = self.cadastrar_locacao(oracle)
+            if(locacao_cadastrado == None):
                 return None
 
             # Atualiza os dados da entidade existente
-            oracle.write(f"update emprestimos set id_livro = '{emprestimo_cadastrado.get_livro().get_id_livro()}', id_usuario = '{emprestimo_cadastrado.get_usuario().get_id_usuario()}', data_emprestimo = to_date('{emprestimo_cadastrado.get_data_emprestimo()}','DD/MM/YYYY'), data_devolucao_sugerida = to_date('{emprestimo_cadastrado.get_data_devolucao()}','DD/MM/YYYY') where id_emprestimo = {id_emprestimo}")
+            oracle.write(f"update locacoes set id_filme = '{locacao_cadastrado.get_filme().get_id_filme()}', id_usuario = '{locacao_cadastrado.get_usuario().get_id_usuario()}', data_locacao = to_date('{locacao_cadastrado.get_data_locacao()}','DD/MM/YYYY'), data_devolucao_sugerida = to_date('{locacao_cadastrado.get_data_devolucao()}','DD/MM/YYYY') where id_locacao = {id_locacao}")
 
             # Cria um novo objeto atualizado
-            emprestimo_atualizado = Controller_Emprestimo.get_emprestimo_from_dataframe(oracle, id_emprestimo)
+            locacao_atualizado = Controller_Locacao.get_locacao_from_dataframe(oracle, id_locacao)
 
             # Exibe os atributos do novo objeto
-            print(emprestimo_atualizado.to_string())
+            print(locacao_atualizado.to_string())
 
             # Retorna o objeto para utilização posterior, caso necessário
-            return emprestimo_atualizado
+            return locacao_atualizado
         else:
-            print(f"O código {id_emprestimo} não existe.")
+            print(f"O código {id_locacao} não existe.")
             return None
 
-    def excluir_emprestimo(self):
+    def excluir_locacao(self):
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries(can_write=True)
         oracle.connect()
 
         # Solicita ao usuário o código da entidade a ser alterada
-        id_emprestimo = int(input("Código do Empréstimo que irá excluir: ")) 
+        id_locacao = int(input("Código da locacao que irá excluir: ")) 
 
         # Verifica se a entidade existe na base de dados
-        if not Controller_Emprestimo.verifica_existencia_emprestimo(oracle, id_emprestimo):            
-            print(f"O código de empréstimo {id_emprestimo} não existe.")
+        if not Controller_Locacao.verifica_existencia_locacao(oracle, id_locacao):            
+            print(f"O código da locacao {id_locacao} é inexistente.")
 
         # Confirma se o usuário realmente deseja excluir o item selecionado
         confirmar_exclusao = input("Deseja realmente continuar com a exclusão? (S/N): ")
         if confirmar_exclusao.strip().lower() != "s":
             return None
 
-        emprestimo_chave_estrangeira = oracle.sqlToDataFrame(f"select id_emprestimo from devolucoes where id_emprestimo = {id_emprestimo}")
+        locacao_chave_estrangeira = oracle.sqlToDataFrame(f"select id_locacao from devolucoes where id_locacao = {id_locacao}")
         
-        if not emprestimo_chave_estrangeira.empty:
-            print(f"O empréstimo de código {id_emprestimo} possui registros dependentes. Deseja excluir mesmo assim? [S/N]")
+        if not locacao_chave_estrangeira.empty:
+            print(f"A locacao de código {id_locacao} possui registros dependentes. Deseja excluir mesmo assim? [S/N]")
             opcao = input()
 
             if opcao.upper() != "S":
@@ -114,77 +114,77 @@ class Controller_Emprestimo:
             print("Excluindo registros dependentes...")
 
         # Recupera os dados da entidade e cria um novo objeto para informar que foi removido
-        emprestimo_excluido = Controller_Emprestimo.get_emprestimo_from_dataframe(oracle, id_emprestimo)
+        locacao_excluida = Controller_Locacao.get_locacao_from_dataframe(oracle, id_locacao)
         # Revome da tabela
-        oracle.write(f"delete from emprestimos where id_emprestimo = {id_emprestimo}")
+        oracle.write(f"delete from locacoes where id_locacao = {id_locacao}")
         # Exibe os atributos do objeto excluído
-        print("Empréstimo removido com Sucesso!")
-        print(emprestimo_excluido.to_string())
+        print("Locacao removida com Sucesso!")
+        print(locacao_excluida.to_string())
 
-    def cadastrar_emprestimo(self, oracle) -> Emprestimo:
+    def cadastrar_locacao(self, oracle) -> Locacao:
         #Solicita os dados de cadastro
-        print("Informe os dados do empréstimo.\n")
+        print("Informe os dados da locacao.\n")
 
-        # Lista os usuarios existentes para inserir no item de emprestimo
+        # Lista os usuarios existentes para inserir no item de locacao
         self.relatorio.get_relatorio_usuarios()
-        codigo_usuario = str(input("\nDigite o código do usuário a fazer o empréstimo: "))
+        codigo_usuario = str(input("\nDigite o código do usuário a fazer a locacao: "))
         usuario = Controller_Usuario.valida_usuario(oracle, codigo_usuario)
         if usuario == None:
             return None        
 
         print("\n\n")
 
-        self.relatorio.get_relatorio_livros_disponiveis()
-        codigo_livro = str(input("\nDigite o código do livro a ser emprestado: "))
-        livro = Controller_Livro.valida_livro_disponivel(oracle, codigo_livro)
-        if livro == None:
+        self.relatorio.get_relatorio_filmes_disponiveis()
+        codigo_filme = str(input("\nDigite o código do filme a ser alugao: "))
+        filme = controller_Filme.valida_filme_disponivel(oracle, codigo_filme)
+        if filme == None:
             return None
 
-        data_emprestimo = input("Data de empréstimo (DD/MM/YYYY): ")
-        while not Controller_Emprestimo.valida_data_format(data_emprestimo):
+        data_locacao = input("Data da locacao (DD/MM/YYYY): ")
+        while not Controller_Locacao.valida_data_format(data_locacao):
             print("\nVocê tentou inserir um formato inválido, tente novamente.\n")
-            data_emprestimo = input("Data de empréstimo (DD/MM/YYYY): ")
+            data_locacao = input("Data da locacao (DD/MM/YYYY): ")
 
         data_devolucao = input("Data prevista de devolução (DD/MM/YYYY): ")
-        while not Controller_Emprestimo.valida_data_format(data_devolucao):
+        while not Controller_Locacao.valida_data_format(data_devolucao):
             print("\nVocê tentou inserir um formato inválido, tente novamente.\n")
             data_devolucao = input("Data prevista de devolução (DD/MM/YYYY): ")
         
-        while not Controller_Emprestimo.valida_data_entrega_devolucao(data_emprestimo, data_devolucao):
+        while not Controller_Locacao.valida_data_entrega_devolucao(data_locacao, data_devolucao):
             print("\nVocê tentou inserir uma data de devolução menor que a data de entrega, tente novamente.\n")
             data_devolucao = input("Data prevista de devolução (DD/MM/YYYY): ")
 
-        return Emprestimo(0, livro, usuario, data_emprestimo, data_devolucao)
+        return Locacao(0, filme, usuario, data_locacao, data_devolucao)
 
     @staticmethod
-    def verifica_existencia_emprestimo(oracle:OracleQueries, id_emprestimo:int=None) -> bool:
+    def verifica_existencia_locacao(oracle:OracleQueries, id_locacao:int=None) -> bool:
         # Recupera os dados da nova entidade criada transformando em um DataFrame
-        df_emprestimo = oracle.sqlToDataFrame(f"select id_emprestimo, id_livro, id_usuario, data_emprestimo, data_devolucao_sugerida from emprestimos where id_emprestimo = {id_emprestimo}")
-        return not df_emprestimo.empty
+        df_locacao = oracle.sqlToDataFrame(f"select id_locacao, id_filme, id_usuario, data_locacao, data_devolucao_sugerida from locacoes where id_locacao = {id_locacao}")
+        return not df_locacao.empty
     
     @staticmethod
-    def get_emprestimo_from_dataframe(oracle:OracleQueries, id_emprestimo:int=None) -> Emprestimo:
+    def get_locacao_from_dataframe(oracle:OracleQueries, id_locacao:int=None) -> Locacao:
         # Recupera os dados transformando em um DataFrame
-        df_emprestimo = oracle.sqlToDataFrame(f"select id_emprestimo, id_livro, id_usuario, data_emprestimo, data_devolucao_sugerida from emprestimos where id_emprestimo = {id_emprestimo}")
+        df_locacao = oracle.sqlToDataFrame(f"select id_locacao, id_filme, id_usuario, data_locacao, data_devolucao_sugerida from locacoes where id_locacao = {id_locacao}")
         # Cria novo objeto a partir do DataFrame
-        livro = Controller_Livro.get_livro_from_dataframe(oracle, int(df_emprestimo.id_livro.values[0]))
-        usuario = Controller_Usuario.get_usuario_from_dataframe(oracle, int(df_emprestimo.id_usuario.values[0]))
-        return Emprestimo(int(df_emprestimo.id_emprestimo.values[0]), livro, usuario, df_emprestimo.data_emprestimo.values[0], df_emprestimo.data_devolucao_sugerida.values[0])
+        filme = controller_Filme.get_filme_from_dataframe(oracle, int(df_locacao.id_filme.values[0]))
+        usuario = Controller_Usuario.get_usuario_from_dataframe(oracle, int(df_locacao.id_usuario.values[0]))
+        return Locacao(int(df_locacao.id_locacao.values[0]), filme, usuario, df_locacao.data_locacao.values[0], df_locacao.data_devolucao_sugerida.values[0])
     
     @staticmethod
-    def valida_emprestimo(oracle:OracleQueries, codigo_emprestimo:int=None) -> Emprestimo:
-        if not Controller_Emprestimo.verifica_existencia_emprestimo(oracle, codigo_emprestimo):
-            print(f"O empréstimo de código {codigo_emprestimo} não existe na base.")
+    def valida_locacao(oracle:OracleQueries, codigo_locacao:int=None) -> Locacao:
+        if not Controller_Locacao.verifica_existencia_locacao(oracle, codigo_locacao):
+            print(f"A locacao de código {codigo_locacao} não existe na base.")
             return None
         else:
-            return Controller_Emprestimo.get_emprestimo_from_dataframe(oracle, codigo_emprestimo)        
+            return Controller_Locacao.get_locacao_from_dataframe(oracle, codigo_locacao)        
 
     @staticmethod
-    def verifica_emprestimo_aberto(oracle:OracleQueries, id_emprestimo:int=None) -> bool:
+    def verifica_locacao_aberto(oracle:OracleQueries, id_locacao:int=None) -> bool:
         # Recupera os dados da nova entidade criada transformando em um DataFrame
         dataframe = oracle.sqlToDataFrame(f"""
             SELECT
-                empr.id_emprestimo,
+                empr.id_locacao,
                 CASE 
                     WHEN 
                         EXISTS (
@@ -193,13 +193,13 @@ class Controller_Emprestimo:
                             FROM
                             devolucoes devo
                             WHERE
-                            devo.id_emprestimo = empr.id_emprestimo
+                            devo.id_locacao = empr.id_locacao
                         )
                     THEN 1
                     ELSE 0
                 END as devolucao_realizada
-            FROM emprestimos empr
-            WHERE empr.id_emprestimo = {id_emprestimo}
+            FROM locacoes empr
+            WHERE empr.id_locacao = {id_locacao}
         """)
         if dataframe.empty:
             return False

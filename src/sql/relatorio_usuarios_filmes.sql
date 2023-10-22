@@ -7,13 +7,13 @@ SELECT
       SELECT
          COUNT(*)
       FROM
-         emprestimos
+         Locacoes
       WHERE
-         emprestimos.id_usuario = usuario.id_usuario
+         Locacoes.id_usuario = usuario.id_usuario
       AND
-         emprestimos.id_emprestimo NOT IN (
+         Locacoes.id_locacao NOT IN (
          SELECT
-            devolucoes.id_emprestimo
+            devolucoes.id_locacao
          FROM
             devolucoes
          )
@@ -22,10 +22,10 @@ SELECT
       SELECT
          COUNT(*)
       FROM
-         emprestimos
+         Locacoes
       WHERE
-         emprestimos.id_usuario = usuario.id_usuario
-   ) AS emprestimos_realizados
+         Locacoes.id_usuario = usuario.id_usuario
+   ) AS Locacoes_realizados
 FROM
   usuarios usuario
 ORDER BY 

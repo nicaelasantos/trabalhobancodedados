@@ -1,6 +1,6 @@
-class Livro:
-    def __init__(self, id_livro:int=None, titulo:str=None, autor:str=None, ano_publicacao:int=None, quantidade:int=1):
-        self.set_id_livro(id_livro)
+class Filme:
+    def __init__(self, id_locacao:int=None, titulo:str=None, autor:str=None, ano_publicacao:int=None, quantidade:int=1):
+        self.set_id_locacao(id_locacao)
         self.set_titulo(titulo)
         self.set_autor(autor)
         self.set_ano_publicacao(ano_publicacao)
@@ -9,8 +9,8 @@ class Livro:
 
     #Setters
 
-    def set_id_livro(self, id_livro:int):
-        self.id_livro = id_livro
+    def set_id_locacao(self, id_locacao:int):
+        self.id_locacao = id_locacao
 
     def set_titulo(self, titulo:str):
         self.titulo = titulo
@@ -29,8 +29,8 @@ class Livro:
 
     #Getters
 
-    def get_id_livro(self) -> int:
-        return self.id_livro
+    def get_id_filme(self) -> int:
+        return self.id_locacao
 
     def get_titulo(self) -> str:
         return self.titulo
@@ -48,4 +48,4 @@ class Livro:
     #     return self.disponibilidade
 
     def to_string(self) -> str:
-        return f"ID: {self.get_id_livro()} | Título: {self.get_titulo()} | Autor: {self.get_autor()} | Ano de Publicação: {self.get_ano_publicacao()} | Quantidade Total: {self.get_quantidade()}"
+        return f"ID: {self.get_id_filme()} | Título: {self.get_titulo()} | Autor: {self.get_autor()} | Ano de Publicação: {self.get_ano_publicacao()} | Quantidade Total: {self.get_quantidade()}"

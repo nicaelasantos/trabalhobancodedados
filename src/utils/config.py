@@ -7,19 +7,19 @@ MENU_PRINCIPAL = """Menu Principal
 """
 
 MENU_RELATORIOS = """Relatórios
-1 - Relatório de Livros
+1 - Relatório de Filmes
 2 - Relatório de Usuários
-3 - Relatório de Empréstimos
+3 - Relatório de Locações
 4 - Relatório de Devoluções
-5 - Relatório de Livros Disponíveis
+5 - Relatório de Filmes Disponíveis
 0 - Sair
 """
 
 MENU_ENTIDADES = """Entidades
-1 - LIVROS
-2 - USUÁRIOS
-3 - EMPRÉSTIMOS
-4 - DEVOLUÇÕES
+1 - Filmes
+2 - Usuários
+3 - Locações
+4 - Devoluções
 """
 
 # Consulta de contagem de registros por tabela

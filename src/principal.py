@@ -1,30 +1,30 @@
 from utils import config
 from utils.splash_screen import SplashScreen
 from reports.relatorios import Relatorio
-from controller.controller_livro import Controller_Livro
+from controller.controller_filme import controller_Filme
 from controller.controller_usuario import Controller_Usuario
-from controller.controller_emprestimo import Controller_Emprestimo
+from controller.controller_locacao import Controller_Locacao
 from controller.controller_devolucao import Controller_Devolucao
 
 tela_inicial = SplashScreen()
 relatorio = Relatorio()
-ctrl_livro = Controller_Livro()
+ctrl_filme = controller_Filme()
 ctrl_usuario = Controller_Usuario()
-ctrl_emprestimo = Controller_Emprestimo()
+Controller_Locacao = Controller_Locacao()
 ctrl_devolucao = Controller_Devolucao()
 
 def reports(opcao_relatorio:int=0):
 
         if opcao_relatorio == 1:
-            relatorio.get_relatorio_livros()
+            relatorio.get_relatorio_filmes()
         if opcao_relatorio == 2:
             relatorio.get_relatorio_usuarios()
         if opcao_relatorio == 3:
-            relatorio.get_relatorio_emprestimos()
+            relatorio.get_relatorio_locacao()
         if opcao_relatorio == 4:
             relatorio.get_relatorio_devolucoes()
         if opcao_relatorio == 5:
-            relatorio.get_relatorio_livros_disponiveis() 
+            relatorio.get_relatorio_filmes_disponiveis() 
 
         input("\nPressione Enter para fechar o relatório")
 
@@ -32,11 +32,11 @@ def inserir(opcao_inserir:int=0):
 
      while True:
         if opcao_inserir == 1:
-            novo_livro = ctrl_livro.inserir_livro()
+            novo_filme = ctrl_filme.inserir_filme()
         elif opcao_inserir == 2:
             novo_cliente = ctrl_usuario.inserir_usuario()
         elif opcao_inserir == 3:
-            novo_emprestimo = ctrl_emprestimo.inserir_emprestimo()
+            novo_locacaoController_Locacao = Controller_Locacao.inserir_locacao()
         elif opcao_inserir == 4:
             nova_devolucao = ctrl_devolucao.inserir_devolucao()
         else:
@@ -53,17 +53,17 @@ def atualizar(opcao_atualizar:int=0) -> bool:
 
     while True:
         if opcao_atualizar == 1:
-            if not relatorio.get_relatorio_livros():
+            if not relatorio.get_relatorio_filmes():
                 return False
-            livro_atualizado = ctrl_livro.atualizar_livro()
+            filme_atualizado = ctrl_filme.atualizar_filme()
         elif opcao_atualizar == 2:
             if not relatorio.get_relatorio_usuarios():
                 return False
             usuario_atualizado = ctrl_usuario.atualizar_usuario()
         elif opcao_atualizar == 3:
-            if not relatorio.get_relatorio_emprestimos():
+            if not relatorio.get_relatorio_locacao():
                 return False
-            emprestimo_atualizado = ctrl_emprestimo.atualizar_emprestimo()
+            locacaoController_Locacao_atualizado = Controller_Locacao.atualizar_locacao()
         elif opcao_atualizar == 4:
             if not relatorio.get_relatorio_devolucoes():
                 return False
@@ -82,17 +82,17 @@ def excluir(opcao_excluir:int=0) -> bool:
 
     while True:
         if opcao_excluir == 1:
-            if not relatorio.get_relatorio_livros():
+            if not relatorio.get_relatorio_filmes():
                 return False
-            ctrl_livro.excluir_livro()
+            ctrl_filme.excluir_filme()
         elif opcao_excluir == 2:
             if not relatorio.get_relatorio_usuarios():
                 return False
             ctrl_usuario.excluir_usuario()
         elif opcao_excluir == 3:
-            if not relatorio.get_relatorio_emprestimos():
+            if not relatorio.get_relatorio_locacao():
                 return False
-            ctrl_emprestimo.excluir_emprestimo()
+            Controller_Locacao.excluir_locacao()
         elif opcao_excluir == 4:
             if not relatorio.get_relatorio_devolucoes():
                 return False

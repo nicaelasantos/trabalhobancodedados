@@ -19,7 +19,7 @@ class Relatorio:
             self.query_relatorio_devolucoes = f.read()
 
 
-    def get_relatorio_livros(self) -> bool:
+    def get_relatorio_filmes(self) -> bool:
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
@@ -33,7 +33,7 @@ class Relatorio:
         print(dataframe)
         return True
     
-    def get_relatorio_livros_disponiveis(self) -> bool:
+    def get_relatorio_filmes_disponiveis(self) -> bool:
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()
@@ -61,7 +61,7 @@ class Relatorio:
         print(dataframe)
         return True
 
-    def get_relatorio_emprestimos(self) -> bool:
+    def get_relatorio_locacao(self) -> bool:
         # Cria uma nova conexão com o banco que permite alteração
         oracle = OracleQueries()
         oracle.connect()

@@ -88,7 +88,7 @@ class Controller_Usuario:
         if confirmar_exclusao.strip().lower() != "s":
             return None
 
-        usuario_chave_estrangeira = oracle.sqlToDataFrame(f"select id_usuario from emprestimos where id_usuario = {id_usuario}")
+        usuario_chave_estrangeira = oracle.sqlToDataFrame(f"select id_usuario from locacao where id_usuario = {id_usuario}")
         
         if not usuario_chave_estrangeira.empty:
             print(f"O usuário de código {id_usuario} possui registros dependentes. Deseja excluir mesmo assim? [S/N]")
