@@ -19,7 +19,6 @@ class controller_Filme:
         #Solicita ao usuario os dados do filme
         print("\nInsira os dados do filme a ser cadastrado.\n")
         titulo_novo_filme = input("Título: ")
-        autor_novo_filme = input("Autor: ")
         ano_novo_filme = int(input("Ano de publicação (número): "))
         qtd_novo_filme = int(input("Quantidade (número): "))
 
@@ -28,12 +27,12 @@ class controller_Filme:
             qtd_novo_filme = int(input("\nDigite a quantidade total desejada (número): "))
 
         # Cria um dicionário para mapear as variáveis de entrada e saída
-        data = dict(codigo=output_value, titulo=titulo_novo_filme, autor=autor_novo_filme, ano=ano_novo_filme, qtd=qtd_novo_filme)
+        data = dict(codigo=output_value, titulo=titulo_novo_filme, ano=ano_novo_filme, qtd=qtd_novo_filme)
         # Executa o bloco PL/SQL anônimo para inserção do novo filme e recuperação da chave primária criada pela sequence
         cursor.execute("""
         begin
             :codigo := FILMES_ID_FILME_SEQ.NEXTVAL;
-            insert into filmes values(:codigo, :titulo, :autor, :ano, :qtd);
+            insert into filmes values(:codigo, :titulo, :ano, :qtd);
         end;
         """, data)
         # Recupera o código do novo filme
@@ -65,7 +64,6 @@ class controller_Filme:
 
         print("Insira os novos dados do filme a ser atualizado.\n")
         titulo = input("Título: ")
-        autor = input("Autor: ")
         ano = int(input("Ano de publicação (número): "))
         qtd = int(input("Quantidade total (número): "))
 
@@ -74,7 +72,7 @@ class controller_Filme:
             qtd = int(input("Quantidade total (número): "))
 
         # Atualiza a descrição do filme existente
-        oracle.write(f"update filmes set titulo = '{titulo}', autor = '{autor}', ano_publicacao = '{ano}', quantidade = '{qtd}' where id_filme = {id_filme}")
+        oracle.write(f"update filmes set titulo = '{titulo}', ano_publicacao = '{ano}', quantidade = '{qtd}' where id_filme = {id_filme}")
 
         # Cria um novo objeto filme
         filme_atualizado = controller_Filme.get_filme_from_dataframe(oracle, id_filme)
@@ -125,15 +123,15 @@ class controller_Filme:
     @staticmethod
     def verifica_existencia_filme(oracle:OracleQueries, id_filme:int=None) -> bool:
         # Recupera os dados da nova entidade criada transformando em um DataFrame
-        df_filme = oracle.sqlToDataFrame(f"select id_filme, titulo, autor, ano_publicacao, quantidade from filmes where id_filme = {id_filme}")
+        df_filme = oracle.sqlToDataFrame(f"select id_filme, titulo, ano_publicacao, quantidade from filmes where id_filme = {id_filme}")
         return not df_filme.empty
     
     @staticmethod
     def get_filme_from_dataframe(oracle:OracleQueries, id_filme:int=None) -> Filme:
         # Recupera os dados do novo filme criado transformando em um DataFrame
-        df_filme = oracle.sqlToDataFrame(f"select id_filme, titulo, autor, ano_publicacao, quantidade from filmes where id_filme = {id_filme}")
+        df_filme = oracle.sqlToDataFrame(f"select id_filme, titulo, ano_publicacao, quantidade from filmes where id_filme = {id_filme}")
         # Cria novo objeto a partir do DataFrame
-        return Filme(df_filme.id_filme.values[0], df_filme.titulo.values[0], df_filme.autor.values[0], df_filme.ano_publicacao.values[0], df_filme.quantidade.values[0])
+        return Filme(df_filme.id_filme.values[0], df_filme.titulo.values[0], df_filme.values[0], df_filme.ano_publicacao.values[0], df_filme.quantidade.values[0])
     
     @staticmethod
     def valida_filme(oracle:OracleQueries, id_filme:int=None) -> Filme:

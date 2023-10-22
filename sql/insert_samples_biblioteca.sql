@@ -1,11 +1,11 @@
 -- Inserindo valores iniciais na tabela "Filme"
-INSERT INTO Filmes (id_filme, titulo, autor, ano_publicacao, quantidade)
+INSERT INTO Filmes (id_filme, titulo, ano_publicacao, quantidade)
 VALUES (FILMES_ID_FILME_SEQ.NEXTVAL, 'Dom Casmurro', 'Machado de Assis', 1899, 1);
 
-INSERT INTO Filmes (id_filme, titulo, autor, ano_publicacao, quantidade)
+INSERT INTO Filmes (id_filme, titulo, ano_publicacao, quantidade)
 VALUES (FILMES_ID_FILME_SEQ.NEXTVAL, '1984', 'George Orwell', 1949, 1);
 
-INSERT INTO Filmes (id_filme, titulo, autor, ano_publicacao, quantidade)
+INSERT INTO Filmes (id_filme, titulo, ano_publicacao, quantidade)
 VALUES (FILMES_ID_FILME_SEQ.NEXTVAL, 'O Senhor dos Aneis', 'J.R.R. Tolkien', 1954, 1);
 
 -- Inserindo valores iniciais na tabela "Usuarios"
